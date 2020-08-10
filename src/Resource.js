@@ -48,7 +48,9 @@ class Resource {
     if (options.url) {
       ({ url } = options);
     } else {
-      url = `${this.name}?${getOptionsQuery(options)}`;
+      if(this.name != 'root'){
+        url = `${this.name}?${getOptionsQuery(options)}`;
+      }
     }
 
     return this.api.get(url).then(extractData).catch(extractErrorResponse);
@@ -56,7 +58,11 @@ class Resource {
 
   find({ id, options } = {}) {
     const url = `${this.name}/${id}?${getOptionsQuery(options)}`;
+    return this.api.get(url).then(extractData).catch(extractErrorResponse);
+  }
 
+  fetch({ url } = {}){
+    console.log("Fetch " + url);
     return this.api.get(url).then(extractData).catch(extractErrorResponse);
   }
 
