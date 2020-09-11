@@ -10,6 +10,10 @@ const getOptionsQuery = (optionsObject = {}) =>
     .map(k => `${k}=${encodeURIComponent(optionsObject[k])}`)
     .join('&');
 
+const getFiltersQuery = (filterObjectArray = []) => 
+  filterObjectArray.map(e => `filter${e.key}=${encodeURIComponent(e.value)}`)
+    .join('&');
+    
 const relatedResourceUrl = ({ parent, relationship }) => {
   const builtUrl = `${parent.type}/${parent.id}/${relationship}`;
 
@@ -26,7 +30,7 @@ const relatedResourceUrl = ({ parent, relationship }) => {
   return builtUrl;
 };
 
-const extractData = response => {resource: response, data: response.data};
+const extractData = response => response.data;
 
 const extractErrorResponse = error => {
   if (error && error.response) {
@@ -61,8 +65,12 @@ class Resource {
     return this.api.get(url).then(extractData).catch(extractErrorResponse);
   }
 
-  fetch({ url } = {}){
-    console.log("Fetch " + url);
+  fetch({ url, filters } = {}){
+
+    if(filters !== undefined){
+      url = `${url}?${getFiltersQuery(filters)}`;
+    }
+
     return this.api.get(url).then(extractData).catch(extractErrorResponse);
   }
 
