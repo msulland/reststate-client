@@ -26,7 +26,7 @@ const relatedResourceUrl = ({ parent, relationship }) => {
   return builtUrl;
 };
 
-const extractData = response => response.data;
+const extractData = response => {resource: response, data: response.data};
 
 const extractErrorResponse = error => {
   if (error && error.response) {
@@ -63,7 +63,7 @@ class Resource {
 
   fetch({ url } = {}){
     console.log("Fetch " + url);
-    return this.api.get(url).then(extractData, response).catch(extractErrorResponse);
+    return this.api.get(url).then(extractData).catch(extractErrorResponse);
   }
 
   where({ filter, options } = {}) {
