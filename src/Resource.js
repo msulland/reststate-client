@@ -63,7 +63,7 @@ class Resource {
 
   fetch({ url } = {}){
     console.log("Fetch " + url);
-    return this.api.get(url).then(extractData).catch(extractErrorResponse);
+    return this.api.get(url).then(extractData, response).catch(extractErrorResponse);
   }
 
   where({ filter, options } = {}) {
